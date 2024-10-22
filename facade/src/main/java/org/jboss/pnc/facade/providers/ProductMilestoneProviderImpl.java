@@ -25,6 +25,7 @@ import org.jboss.pnc.common.logging.MDCUtils;
 import org.jboss.pnc.constants.Patterns;
 import org.jboss.pnc.datastore.repositories.ProductMilestoneRepositoryImpl;
 import org.jboss.pnc.datastore.repositories.internal.SortInfoConverter;
+import org.jboss.pnc.dto.DeliveredArtifactComparison;
 import org.jboss.pnc.dto.ProductMilestone;
 import org.jboss.pnc.dto.ProductMilestoneCloseResult;
 import org.jboss.pnc.dto.ProductMilestoneRef;
@@ -341,6 +342,11 @@ public class ProductMilestoneProviderImpl extends
                 .artifactQuality(deliverableArtifactRepository.getArtifactQualitiesCounts(milestoneId))
                 .repositoryType(deliverableArtifactRepository.getRepositoryTypesCounts(milestoneId))
                 .build();
+    }
+
+    @Override
+    public Page<DeliveredArtifactComparison> compareDeliveredArtifacts(List<String> milestoneIds) {
+        return milestoneRepository.compareDeliveredArtifacts(milestoneIds);
     }
 
     private int getMatchingArtifactMilestonesCount(

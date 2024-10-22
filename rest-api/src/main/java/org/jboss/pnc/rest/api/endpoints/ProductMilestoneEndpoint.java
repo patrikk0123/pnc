@@ -27,6 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.jboss.pnc.dto.Artifact;
 import org.jboss.pnc.dto.Build;
 import org.jboss.pnc.dto.DeliverableAnalyzerOperation;
+import org.jboss.pnc.dto.DeliveredArtifactComparison;
 import org.jboss.pnc.dto.ProductMilestone;
 import org.jboss.pnc.dto.ProductMilestoneCloseResult;
 import org.jboss.pnc.dto.requests.DeliverablesAnalysisRequest;
@@ -44,6 +45,7 @@ import org.jboss.pnc.rest.api.swagger.response.SwaggerPages.ArtifactPage;
 import org.jboss.pnc.rest.api.swagger.response.SwaggerPages.BuildPage;
 import org.jboss.pnc.rest.api.swagger.response.SwaggerPages.DeliverableAnalyzerOperationPage;
 import org.jboss.pnc.rest.api.swagger.response.SwaggerPages.ProductMilestoneCloseResultPage;
+import org.jboss.resteasy.util.PathHelper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -59,6 +61,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.List;
 
 import static org.jboss.pnc.rest.configuration.SwaggerConstants.ACCEPTED_CODE;
 import static org.jboss.pnc.rest.configuration.SwaggerConstants.ACCEPTED_DESCRIPTION;
@@ -460,4 +464,9 @@ public interface ProductMilestoneEndpoint {
     DeliverableAnalyzerOperation analyzeDeliverables(
             @Parameter(description = PM_ID) @PathParam("id") String id,
             @Valid DeliverablesAnalysisRequest request);
+
+    @POST
+    @RespondWithStatus(Response.Status.OK)
+    @Path("/comparison/delivered-artifacts")
+    Page<DeliveredArtifactComparison> compareDeliveredArtifacts(List<String> milestoneIds);
 }

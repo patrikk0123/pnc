@@ -17,8 +17,12 @@
  */
 package org.jboss.pnc.spi.datastore.repositories;
 
+import org.jboss.pnc.dto.DeliveredArtifactComparison;
+import org.jboss.pnc.dto.response.Page;
 import org.jboss.pnc.model.ProductMilestone;
 import org.jboss.pnc.spi.datastore.repositories.api.Repository;
+
+import java.util.List;
 
 /**
  * Interface for manipulating {@link org.jboss.pnc.model.ProductMilestone} entity.
@@ -26,4 +30,6 @@ import org.jboss.pnc.spi.datastore.repositories.api.Repository;
 public interface ProductMilestoneRepository extends Repository<ProductMilestone, Integer> {
 
     long countBuiltArtifactsInMilestone(Integer id);
+
+    List<DeliveredArtifactComparison> compareDeliveredArtifacts(List<String> milestoneIds);
 }
