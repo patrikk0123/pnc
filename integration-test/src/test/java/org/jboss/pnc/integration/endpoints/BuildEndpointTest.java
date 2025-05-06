@@ -789,6 +789,21 @@ public class BuildEndpointTest {
         assertThat(actualGraph.getEdges()).containsExactlyInAnyOrderElementsOf(expectedEdges);
     }
 
+    @Test
+    public void testGetDependencyArtifactsBetweenBuilds() throws ClientException {
+        // arrange
+        BuildClient client = new BuildClient(RestClientConfiguration.asAnonymous());
+
+        List<String> expectedDependencyArtifacts = List.of("102", "103");
+
+        // act
+        RemoteCollection<Artifact> actualList = client.getDependencyArtifactsBetweenBuilds(build6Id, build2Id);
+
+        // assert
+        assertThat(actualList).hasSize(2);
+        assertThat(actualList).extracting(Artifact::getId).hasSameElementsAs(expectedDependencyArtifacts);
+    }
+
     private Set<Integer> artifactIds(RemoteCollection<Artifact> artifacts) {
         Set<Integer> artifactIds = new HashSet<>();
         for (Artifact a : artifacts) {
