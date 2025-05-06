@@ -50,6 +50,7 @@ import org.jboss.pnc.rest.configuration.SwaggerConstants;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
@@ -864,4 +865,36 @@ public interface BuildEndpoint {
     Graph<Build> getBuildArtifactDependencyGraph(
             @Parameter(description = B_ID) @PathParam("id") String buildId,
             @org.jboss.resteasy.annotations.jaxrs.QueryParam("depthLimit") @Min(0) @Max(5) @DefaultValue("5") Integer depthLimit);
+
+    static final String GET_DEPENDENCY_ARTIFACTS_BETWEEN_BUILDS = "Fetches Artifacts produced in one specified Build and used as a dependency in the other specified Build.";
+
+    /**
+     * {@value GET_DEPENDENCY_ARTIFACTS_BETWEEN_BUILDS}
+     *
+     * @param pageParameters
+     * @param dependantBuildId
+     * @param dependencyBuildId
+     * @return
+     */
+    @Operation(
+            summary = GET_DEPENDENCY_ARTIFACTS_BETWEEN_BUILDS,
+            responses = {
+                    @ApiResponse(
+                            responseCode = SUCCESS_CODE,
+                            description = SUCCESS_DESCRIPTION,
+                            content = @Content(schema = @Schema(implementation = ArtifactPage.class))),
+                    @ApiResponse(
+                            responseCode = INVALID_CODE,
+                            description = INVALID_DESCRIPTION,
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(
+                            responseCode = SERVER_ERROR_CODE,
+                            description = SERVER_ERROR_DESCRIPTION,
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))) })
+    @GET
+    @Path("/artifacts/dependencies/shared")
+    Page<Artifact> getDependencyArtifactsBetweenBuilds(
+            @Valid @BeanParam PageParameters pageParameters,
+            @Parameter(description = B_ID) @NotBlank @QueryParam("dependantId") String dependantBuildId,
+            @Parameter(description = B_ID) @NotBlank @QueryParam("dependencyId") String dependencyBuildId);
 }
